@@ -26,21 +26,29 @@ ctx.lineCap = "round";
 let isPainting = false;
 let isFilling = false;
 
+setInterval(() => {
+  console.log(`time Interval check: ${isPainting}`);
+}, 1000);
+
 function onMove(event) {
   if (isPainting) {
     ctx.lineTo(event.offsetX, event.offsetY);
     ctx.stroke();
+    console.log(`in onMove ${isPainting}`);
+
     return;
   }
-
   ctx.moveTo(event.offsetX, event.offsetY);
+  console.log(`in onMove ${isPainting}`);
 }
 
 function startPainting() {
   isPainting = true;
+  console.log(`in startPainting ${isPainting}`);
 }
 function cancelPainting() {
   isPainting = false;
+  console.log(`in cancelPainting ${isPainting}`);
   ctx.beginPath();
 }
 
@@ -49,8 +57,9 @@ function onLineWidthChange(event) {
 }
 
 function onColorChange(event) {
-  ctx.strokeStyle = event.target.value;
-  ctx.fillStyle = event.target.value;
+  const colorValue = event.target.value;
+  ctx.strokeStyle = colorValue;
+  ctx.fillStyle = colorValue;
 }
 
 function onColorClick(event) {
@@ -77,13 +86,16 @@ function onCanvasClick() {
 }
 
 function onResetClick() {
+  ctx.save();
   ctx.fillStyle = "white";
   ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+  ctx.restore();
 }
 
 function onEraserClick() {
   ctx.strokeStyle = "white";
-  ctx.fillStyle = "white";
+  isFilling = false;
+  modeBtn.innerText = "🩸Fill";
 }
 
 function onFileChange(event) {
@@ -99,7 +111,8 @@ function onFileChange(event) {
 
 function onDoubleClick(event) {
   const text = textInput.value;
-  if (text !== null) {
+
+  if (text !== "") {
     ctx.save();
     ctx.lineWidth = 1;
     ctx.font = "42px serif";
@@ -108,7 +121,7 @@ function onDoubleClick(event) {
   }
 }
 
-function onSaveClick(event) {
+function onSaveClick() {
   const url = canvas.toDataURL();
   const a = document.createElement("a");
   a.href = url;
@@ -124,9 +137,9 @@ canvas.addEventListener("mouseleave", cancelPainting);
 canvas.addEventListener("click", onCanvasClick);
 lineWidth.addEventListener("change", onLineWidthChange);
 color.addEventListener("change", onColorChange);
+colorOptions.forEach((color) => color.addEventListener("click", onColorClick));
 modeBtn.addEventListener("click", onModeClick);
 resetBtn.addEventListener("click", onResetClick);
 eraserBtn.addEventListener("click", onEraserClick);
 fileInput.addEventListener("change", onFileChange);
 saveBtn.addEventListener("click", onSaveClick);
-colorOptions.forEach((color) => color.addEventListener("click", onColorClick));

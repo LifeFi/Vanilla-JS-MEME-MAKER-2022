@@ -1,4 +1,4 @@
-@import "./reset.css";
+@import "reset.css";
 
 body {
   display: flex;
@@ -42,9 +42,9 @@ canvas {
   box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
-.color-option:hover {
+/* .color-option:hover {
   transform: scale(1.2);
-}
+} */
 
 input#color {
   background-color: white;
